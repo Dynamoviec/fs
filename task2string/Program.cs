@@ -8,11 +8,15 @@ namespace task2string
         {
             Console.WriteLine("Enter your text:");
             string text = Console.ReadLine();
-            for (int i = 0; i < text.Length; i++)
+            int LENGTH = text.Length;
+
+            for (int i = 0; i < LENGTH; i++)
             {
                 text = text.Replace("  ", " ");
+            
             }
             Console.WriteLine(text);
+            Console.WriteLine($"'{text}', text len = {text.Length}");
             Console.ReadLine();
         }
     }
