@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+//using System.Net.Http;
+//using System.Net.Http.Headers;
+//using System.Threading.Tasks;
 
 namespace task3MoneyExchange
 {
@@ -10,6 +11,9 @@ namespace task3MoneyExchange
     {
         static void Main(string[] args)
         {
+
+            string[] arrayED = new string[7];
+            int i = 0;
             double gryvna, buf, dinar;
             string result, search;
             Console.WriteLine("Enter UAH sum");
@@ -18,7 +22,23 @@ namespace task3MoneyExchange
             {
                 result = page.DownloadString("https://freecurrencyrates.com/ru/convert-UAH-RSD");
             }
-            search = result.Substring(20877, 4);
+            Regex regex = new Regex("курс обмена UAH/RSD - [0-9]{1}.[0-9]{2}", RegexOptions.Singleline);
+            MatchCollection matches = regex.Matches(result);
+            if (matches.Count > 0)
+            {
+                foreach (Match match in matches)
+                {
+                   
+                    arrayED[i] = match.Value;
+                    i++;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Совпадений не найдено");
+            }
+            search = arrayED[0];
+            search = search.Substring(22, 4);
             search = search.Replace(".", ",");
             buf = Convert.ToDouble(search);
             dinar = gryvna * buf;
