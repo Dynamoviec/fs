@@ -11,39 +11,29 @@ namespace task3MoneyExchange
     {
         static void Main(string[] args)
         {
-
-            string[] arrayED = new string[7];
-            int i = 0;
+           
             double gryvna, buf, dinar;
-            string result, search;
+            string result, currency;
+            string text = "Текущий курс обмена UAH/RSD - ";
             Console.WriteLine("Enter UAH sum");
             gryvna = Convert.ToDouble(Console.ReadLine());
             using (var page = new WebClient())
             {
                 result = page.DownloadString("https://freecurrencyrates.com/ru/convert-UAH-RSD");
             }
-            Regex regex = new Regex("курс обмена UAH/RSD - [0-9]{1}.[0-9]{2}", RegexOptions.Singleline);
-            MatchCollection matches = regex.Matches(result);
-            if (matches.Count > 0)
+            bool b = result.Contains(text);
+            if (b)
             {
-                foreach (Match match in matches)
+                int index = result.IndexOf(text);
+                if (index >= 0)
                 {
-                   
-                    arrayED[i] = match.Value;
-                    i++;
+                    currency = result.Substring(index + text.Length, 4);
+                    currency = currency.Replace(".", ",");
+                    buf = Convert.ToDouble(currency);
+                    dinar = gryvna * buf;
+                    Console.WriteLine($"{gryvna} UAH = {dinar} dinar");
                 }
             }
-            else
-            {
-                Console.WriteLine("Совпадений не найдено");
-            }
-            search = arrayED[0];
-            search = search.Substring(22, 4);
-            search = search.Replace(".", ",");
-            buf = Convert.ToDouble(search);
-            dinar = gryvna * buf;
-            
-            Console.WriteLine($"{gryvna} UAH = {dinar} dinar");
             Console.ReadLine();
 
         }
